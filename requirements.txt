@@ -3,9 +3,7 @@ Django==5.2.5
 djangorestframework==3.16.1
 djangorestframework-simplejwt==5.5.1
 
-# Database
-dj-database-url==3.0.1
-psycopg2-binary==2.9.10
+
 
 # Security & Authentication
 PyJWT==2.10.1

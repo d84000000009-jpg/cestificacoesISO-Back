@@ -25,12 +25,21 @@ class CertificationSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'unique_link', 'created_at', 'updated_at']
 
     def get_foto(self, obj):
-        """Retorna URL absoluta da foto"""
-        request = self.context.get("request")
-        if obj.foto and request:
-            return request.build_absolute_uri(obj.foto.url)
-        elif obj.foto:
+        """Retorna URL completa da foto"""
+        request = self.context.get('request')
+        
+        if obj.foto:
+            # Se houver request, constrói URL absoluta
+            if request is not None:
+                return request.build_absolute_uri(obj.foto.url)
+            # Caso contrário, retorna o caminho relativo
             return obj.foto.url
+        
+        # Retorna avatar padrão se não houver foto
+        if request is not None:
+            nome = obj.nome_completo.replace(' ', '+')
+            return f"https://ui-avatars.com/api/?name={nome}&background=3b82f6&color=fff&size=200"
+        
         return None
 
     def get_link_completo(self, obj):
