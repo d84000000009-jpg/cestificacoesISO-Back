@@ -1,6 +1,7 @@
 from pathlib import Path
 import os
 from decouple import config
+import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -84,20 +85,36 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "backend.wsgi.application"
 
-# Banco de dados SQLite (Render + Local)
-if os.environ.get("RENDER"):
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": "/opt/render/project/src/db.sqlite3",  # ✅ Mudança aqui
+# 🗄️ Banco de dados (PostgreSQL via DATABASE_URL)
+# - Funciona local e em produção (Render/VPS/etc)
+# - Basta setar DATABASE_URL no ambiente (.env ou variáveis do serviço)
+DATABASE_URL = config("DATABASE_URL", default="")
+
+if not DATABASE_URL:
+    # Fallback para SQLite apenas se DATABASE_URL não existir
+    # (útil para dev rápido, mas no teu caso podes remover se quiseres)
+    if os.environ.get("RENDER"):
+        DATABASES = {
+            "default": {
+                "ENGINE": "django.db.backends.sqlite3",
+                "NAME": "/opt/render/project/src/db.sqlite3",
+            }
         }
-    }
+    else:
+        DATABASES = {
+            "default": {
+                "ENGINE": "django.db.backends.sqlite3",
+                "NAME": BASE_DIR / "db.sqlite3",
+            }
+        }
 else:
+    # Postgres
     DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
-        }
+        "default": dj_database_url.parse(
+            DATABASE_URL,
+            conn_max_age=600,
+            ssl_require=False,  # se o teu Postgres exigir SSL, muda para True
+        )
     }
 
 # 🔑 Validação de senhas

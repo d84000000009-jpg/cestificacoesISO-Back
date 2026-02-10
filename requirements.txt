@@ -44,3 +44,6 @@ anyio==4.10.0
 
 # Production Dependencies
 django-filter==24.3
+
+psycopg[binary]==3.2.10
+dj-database-url==2.3.0
