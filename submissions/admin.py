@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.http import HttpResponse
-from django.utils.html import format_html
+from django.utils.html import format_html, mark_safe
 import csv
 import datetime
 from .models import Submission
@@ -146,12 +146,8 @@ class SubmissionAdmin(admin.ModelAdmin):
 
     def consent_display(self, obj):
         if obj.consent:
-            return format_html(
-                '<span style="color: #28a745; font-weight: 600;">✓ Sim</span>'
-            )
-        return format_html(
-            '<span style="color: #dc3545; font-weight: 600;">✗ Não</span>'
-        )
+            return mark_safe('<span style="color: #28a745; font-weight: 600;">✓ Sim</span>')
+        return mark_safe('<span style="color: #dc3545; font-weight: 600;">✗ Não</span>')
     consent_display.short_description = 'Consentimento'
     consent_display.admin_order_field = 'consent'
 

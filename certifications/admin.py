@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.utils.html import format_html
+from django.utils.html import format_html, mark_safe
 from django.db import models
 from django.forms import Textarea
 from .models import Certification, Modulo
@@ -122,7 +122,7 @@ class CertificationAdmin(admin.ModelAdmin):
                 '🔗 Ver Link</a>',
                 public_url
             )
-        return format_html('<span style="color: #6c757d;">Aguardando...</span>')
+        return mark_safe('<span style="color: #6c757d;">Aguardando...</span>')
     link_display.short_description = 'Link'
 
     def link_card(self, obj):
@@ -203,7 +203,7 @@ class CertificationAdmin(admin.ModelAdmin):
                 '</script>',
                 share_url, obj.unique_link, share_url, share_url
             )
-        return format_html(
+        return mark_safe(
             '<div style="background: #f8f9fa; padding: 20px; border-radius: 8px; text-align: center; '
             'border: 2px dashed #dee2e6;">'
             '<span style="font-size: 48px; display: block; margin-bottom: 12px;">🔗</span>'
