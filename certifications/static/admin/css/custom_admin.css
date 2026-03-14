@@ -1,0 +1,82 @@
+/* CPTec Academy - Custom Admin Styles */
+
+/* Layout geral */
+.module h2, .module caption {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* Botões de ação */
+.submit-row input[type="submit"],
+.submit-row a.closelink {
+    border-radius: 6px;
+}
+
+/* Melhorias na tabela de listagem */
+#result_list th {
+    background: #f8f9fa;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Destaque nas linhas ao hover */
+#result_list tr:hover td {
+    background-color: #f0f4ff;
+}
+
+/* Fieldsets */
+.fieldset-group .module {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Readonly fields */
+.readonly {
+    padding: 8px 0;
+    color: #333;
+}
+
+/* Inline admin */
+.inline-group .tabular td,
+.inline-group .tabular th {
+    padding: 8px 12px;
+}
+
+/* Badges e status */
+.status-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    color: white;
+}
+
+/* Card de link */
+.link-card-container {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* Mensagens de sucesso/erro */
+.messagelist .success {
+    border-left: 4px solid #28a745;
+}
+
+.messagelist .error {
+    border-left: 4px solid #dc3545;
+}
+
+/* Barra de pesquisa */
+#searchbar {
+    border-radius: 6px;
+    padding: 8px 12px;
+    border: 1px solid #dee2e6;
+    width: 300px;
+}
+
+/* Data hierarchy */
+.xfull {
+    width: 100%;
+}
