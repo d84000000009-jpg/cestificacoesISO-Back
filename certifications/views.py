@@ -1,6 +1,9 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
+from django.contrib.admin.models import ADDITION, CHANGE, DELETION, LogEntry
+from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 from django.core.exceptions import ValidationError
 from django.shortcuts import render, get_object_or_404
@@ -13,6 +16,11 @@ from .serializers import CertificationSerializer
 
 logger = logging.getLogger(__name__)
 
+# Ações de consulta pública para verificação de certificados (usadas pelo site,
+# sem login); a listagem/CRUD administrativo exige autenticação.
+PUBLIC_ACTIONS = {'get_by_link', 'get_by_codigo'}
+
+
 class CertificationViewSet(viewsets.ModelViewSet):
     queryset = Certification.objects.select_related().prefetch_related('modulos')
     serializer_class = CertificationSerializer
@@ -20,6 +28,33 @@ class CertificationViewSet(viewsets.ModelViewSet):
     search_fields = ['nome_completo', 'documento', 'codigo', 'curso']
     ordering_fields = ['data_conclusao', 'created_at', 'nome_completo']
     ordering = ['-created_at']
+
+    def get_permissions(self):
+        if self.action in PUBLIC_ACTIONS:
+            return [AllowAny()]
+        return [IsAuthenticated()]
+
+    def _log_action(self, instance, action_flag, message=''):
+        LogEntry.objects.log_action(
+            user_id=self.request.user.pk,
+            content_type_id=ContentType.objects.get_for_model(Certification).pk,
+            object_id=instance.pk,
+            object_repr=str(instance),
+            action_flag=action_flag,
+            change_message=message,
+        )
+
+    def perform_create(self, serializer):
+        instance = serializer.save()
+        self._log_action(instance, ADDITION, 'Criada via painel admin')
+
+    def perform_update(self, serializer):
+        instance = serializer.save()
+        self._log_action(instance, CHANGE, 'Atualizada via painel admin')
+
+    def perform_destroy(self, instance):
+        self._log_action(instance, DELETION, 'Removida via painel admin')
+        instance.delete()
 
     def get_queryset(self):
         """Otimiza queries com filtros adicionais"""

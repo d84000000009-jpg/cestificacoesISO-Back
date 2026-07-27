@@ -1,4 +1,5 @@
 from rest_framework import generics, status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.core.exceptions import ValidationError
 from django.utils.decorators import method_decorator
@@ -53,6 +54,7 @@ class SubmissionListView(generics.ListAPIView):
     """Lista todas as submissões com paginação"""
     queryset = Submission.objects.all()
     serializer_class = SubmissionSerializer
+    permission_classes = [IsAuthenticated]
     filterset_fields = ['service', 'consent']
     search_fields = ['name', 'email', 'service']
     ordering_fields = ['created_at', 'name']

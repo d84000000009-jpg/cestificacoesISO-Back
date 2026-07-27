@@ -19,7 +19,8 @@ def health_check(request):
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/submissions/', include('submissions.urls')),
-    path('api/certifications/', include('certifications.urls')), 
+    path('api/certifications/', include('certifications.urls')),
+    path('api/accounts/', include('accounts.urls')),
     path('health/', health_check, name='health-check'),
     path('', health_check),  # rota raiz
 ]

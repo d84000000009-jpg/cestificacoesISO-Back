@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "submissions",
     "certifications",
+    "accounts",
 ]
 
 # ⚙️ Middleware
@@ -177,6 +178,8 @@ if os.environ.get("RENDER") and os.environ.get("RENDER_EXTERNAL_HOSTNAME"):
 CSRF_TRUSTED_ORIGINS.extend([
     "https://www.cptec.co.mz",
     "https://cptec.co.mz",
+    "http://localhost:8080",
+    "http://127.0.0.1:8080",
 ])
 
 REST_FRAMEWORK = {
